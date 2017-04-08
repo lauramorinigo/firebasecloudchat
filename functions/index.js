@@ -6,7 +6,9 @@
  * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ *const gcs = require('@google-cloud/storage')();
+const vision = require('@google-cloud/vision')();
+const exec = require('child-process-promise').exec;
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +20,10 @@
 
 const functions = require('firebase-functions');
 const admin     = require('firebase-admin');
+
+const gcs = require('@google-cloud/storage')();
+const vision = require('@google-cloud/vision')();
+const exec = require('child-process-promise').exec;
 
 admin.initializeApp(functions.config().firebase);
 
@@ -39,6 +45,57 @@ exports.addWelcomeMessages = functions.auth.user().onCreate(event=>{
 
 
 // TODO(DEVELOPER): Write the blurOffensiveImages Function here.
+
+// Blurs uploaded images that are flagged as Adult or Violence.
+exports.blurOffensiveImages = functions.storage.object().onChange(event => {
+  const object = event.data;
+  // Exit if this is a deletion or a deploy event.
+  if (object.resourceState === 'not_exists') {
+    return console.log('This is a deletion event.');
+  } else if (!object.name) {
+    return console.log('This is a deploy event.');
+  }
+
+  const bucket = gcs.bucket(object.bucket);
+  const file = bucket.file(object.name);
+
+  // Check the image content using the Cloud Vision API.
+  return vision.detectSafeSearch(file).then(safeSearchResult => {
+    if (safeSearchResult[0].adult || safeSearchResult[0].violence) {
+      console.log('The image', object.name, 'has been detected as inappropriate.');
+      return blurImage(object.name, bucket);
+    } else {
+      console.log('The image', object.name,'has been detected as OK.');
+    }
+  });
+});
+
+// Blurs the given image located in the given bucket using ImageMagick.
+function blurImage(filePath, bucket, metadata) {
+  const fileName = filePath.split('/').pop();
+  const tempLocalFile = `/tmp/${fileName}`;
+  const messageId = filePath.split('/')[1];
+
+  // Download file from bucket.
+  return bucket.file(filePath).download({destination: tempLocalFile})
+    .then(() => {
+      console.log('Image has been downloaded to', tempLocalFile);
+      // Blur the image using ImageMagick.
+      return exec(`convert ${tempLocalFile} -channel RGBA -blur 0x24 ${tempLocalFile}`);
+    }).then(() => {
+      console.log('Image has been blurred');
+      // Uploading the Blurred image back into the bucket.
+      return bucket.upload(tempLocalFile, {destination: filePath});
+    }).then(() => {
+      console.log('Blurred image has been uploaded to', filePath);
+      // Indicate that the message has been moderated.
+      return admin.database().ref(`/messages/${messageId}`).update({moderated: true});
+    }).then(() => {
+      console.log('Marked the image as moderated in the database.');
+    });
+}
+
+
 
 // TODO(DEVELOPER): Write the sendNotifications Function here.
 

@@ -1,0 +1,60 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      C:\Program Files\nodejs\node.exe C:\Users\Laura Morinigo\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase deploy
+[debug] CLI Version:  3.6.0
+[debug] Platform:     win32
+[debug] Node Version: v6.9.5
+[debug] Time:         Sat Apr 08 2017 15:47:30 GMT-0300 (Argentina Standard Time)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[debug] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/RvUlv_6gLnvd6zZq4FughIghgBSB7NnobTV76jw_SgI',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Sat Apr 08 2017 15:47:31 GMT-0300 (Argentina Standard Time)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/in-the-cloud-6c059  
+ Sat Apr 08 2017 15:47:31 GMT-0300 (Argentina Standard Time)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/in-the-cloud-6c059/tokens  
+ Sat Apr 08 2017 15:47:33 GMT-0300 (Argentina Standard Time)
+[debug] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'in-the-cloud-6c059'...
+[info] 
+[info] i  deploying database, storage, functions, hosting
+[info] +  database: rules ready to deploy.
+[info] i  storage: checking rules for compilation errors...
+[debug] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/in-the-cloud-6c059:test { source: { files: [ [Object] ] } } 
+ Sat Apr 08 2017 15:47:37 GMT-0300 (Argentina Standard Time)
+[debug] <<< HTTP RESPONSE 200
+[info] +  storage: rules file compiled successfully
+[debug] > [functions] package.json contents: {
+  "name": "friendlychat-codelab",
+  "description": "Firebase SDK for Cloud Functions codelab",
+  "dependencies": {
+    "@google-cloud/storage": "^1.0.0",
+    "@google-cloud/vision": "^0.11.0",
+    "child-process-promise": "^2.2.1",
+    "firebase-admin": "^4.1.1",
+    "firebase-functions": "^0.5.1"
+  }
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[info] i  runtimeconfig: ensuring necessary APIs are enabled...
+[debug] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/in-the-cloud-6c059?view=CONSUMER_VIEW  
+ Sat Apr 08 2017 15:47:38 GMT-0300 (Argentina Standard Time)
+[debug] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/in-the-cloud-6c059?view=CONSUMER_VIEW  
+ Sat Apr 08 2017 15:47:38 GMT-0300 (Argentina Standard Time)
+[debug] <<< HTTP RESPONSE 200
+[info] +  runtimeconfig: all necessary APIs are enabled
+[debug] <<< HTTP RESPONSE 200
+[info] +  functions: all necessary APIs are enabled
+[debug] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/in-the-cloud-6c059  
+ Sat Apr 08 2017 15:47:39 GMT-0300 (Argentina Standard Time)
+[debug] >>> HTTP REQUEST GET https://apikeys.googleapis.com/v1/projects/in-the-cloud-6c059/apiKeys  
+ Sat Apr 08 2017 15:47:39 GMT-0300 (Argentina Standard Time)
+[debug] <<< HTTP RESPONSE 200
+[debug] <<< HTTP RESPONSE 200
